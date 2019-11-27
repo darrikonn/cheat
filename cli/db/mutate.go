@@ -12,7 +12,8 @@ func AddCheat(command string, name string, description string, weight int) strin
       id, command, name, description, weight)
       VALUES (?, ?, ?, ?, ?)
     `,
-	); defer statement.Close()
+	)
+	defer statement.Close()
 	if err != nil {
 		panic(err)
 	}
@@ -30,7 +31,8 @@ func DeleteCheat(id string) {
 		`DELETE FROM cheat
      WHERE id = ?;
     `,
-	); defer statement.Close()
+	)
+	defer statement.Close()
 	if err != nil {
 		panic(err)
 	}

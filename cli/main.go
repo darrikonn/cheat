@@ -1,9 +1,9 @@
 package main
 
 import (
-  "cheat/cli/cmd"
+	"cheat/cli/cmd"
 )
 
 func main() {
-  cmd.Execute()
+	cmd.Execute()
 }

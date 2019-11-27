@@ -10,13 +10,19 @@ RM=rm
 LDFLAG=-fPIC
 endif
 
-all : $(EXE) $(EXT)
+all: $(EXE) $(EXT)
 
-$(EXE) : extension.go
+$(EXE): extension.go
 	go build $<
 
-$(EXT) : sqlite3_mod_regexp.c
+$(EXT): sqlite3_mod_regexp.c
 	gcc $(LDFLAG) -shared -o $@ $< -lsqlite3 -lpcre
 
-clean :
+clean:
 	@-$(RM) $(EXE) $(EXT)
+
+lint:
+	golint ./...
+
+format:
+	go fmt ./...
