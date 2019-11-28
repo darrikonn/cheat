@@ -1,1 +1,3 @@
 go get -u golang.org/x/lint/golint
+go get -u github.com/kisielk/errcheck
+go get -u github.com/tsenart/deadcode

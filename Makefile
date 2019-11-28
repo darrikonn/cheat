@@ -21,8 +21,25 @@ $(EXT): sqlite3_mod_regexp.c
 clean:
 	@-$(RM) $(EXE) $(EXT)
 
-lint:
+requirements:
+	@while read in; do \
+		echo "$$in"; \
+		eval "$$in"; \
+	done < dev-requirements.txt
+
+golint:
 	golint ./...
+
+vet:
+	go vet ./...
+
+errcheck:
+	errcheck ./...
+
+deadcode:
+	find cli -type d | xargs deadcode
+
+lint: golint vet errcheck deadcode
 
 format:
 	go fmt ./...
