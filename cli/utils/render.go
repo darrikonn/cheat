@@ -15,6 +15,7 @@ func format(str string, kwargs map[string]string) string {
 	return strings.NewReplacer(args...).Replace(str)
 }
 
+// Render : print formatted text to console output
 func Render(str string, kwargs map[string]string) {
 	styledString := format(str+"{RESET}", styles)
 	fmt.Println(format(styledString, kwargs))

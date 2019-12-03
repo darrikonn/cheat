@@ -6,7 +6,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func init() {}
+func init() {
+	rootCmd.AddCommand(editCmd)
+}
 
 var editCmd = &cobra.Command{
 	Use:   "edit",

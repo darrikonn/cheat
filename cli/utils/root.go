@@ -7,12 +7,14 @@ import (
 	"time"
 )
 
+// GenerateRandomID : randomly generates a random 6 digit integer, casted to string
 func GenerateRandomID() string {
 	rand.Seed(time.Now().UnixNano())
 	id := strconv.Itoa(rand.Intn(1000000)) // 10 ^ 6
 	return strings.Repeat("0", 6-len(id)) + id
 }
 
+// SingularOrPlural : returns the pluralization of the noun
 func SingularOrPlural(word string, count int) string {
 	if count == 1 {
 		return word
@@ -20,11 +22,9 @@ func SingularOrPlural(word string, count int) string {
 	return word + "s"
 }
 
-func contains(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
+// Check : handle errors for defer functions
+func Check(f func() error) {
+	if err := f(); err != nil {
+		panic(err)
 	}
-	return false
 }

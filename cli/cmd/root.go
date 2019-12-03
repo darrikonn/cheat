@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	"cheat/cli/cmd/exceptions"
 	db "cheat/cli/db"
 	"cheat/cli/utils"
 )
@@ -31,7 +32,7 @@ func errorHandling() {
 	err := recover()
 	if err != nil {
 		switch err.(type) {
-		case *AbortType:
+		case *exceptions.AbortType:
 			fmt.Println("Abort!")
 		default:
 			if verbose {
@@ -45,6 +46,8 @@ func errorHandling() {
 	}
 }
 
+// Execute : executes the root command
+// that combines all cli subcommands
 func Execute() error {
 	defer errorHandling()
 	defer db.Cleanup()
@@ -58,9 +61,9 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cheat.yaml)")
 	rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
 	rootCmd.PersistentFlags().BoolVar(&verbose, "verbose", false, "verbose output")
-
-	viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper"))
-	viper.BindPFlag("useVerbose", rootCmd.PersistentFlags().Lookup("verbose"))
+	//
+	// viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper"))
+	// viper.BindPFlag("useVerbose", rootCmd.PersistentFlags().Lookup("verbose"))
 }
 
 func initConfig() {

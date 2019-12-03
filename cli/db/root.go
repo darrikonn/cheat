@@ -13,11 +13,19 @@ import (
 var database *sql.DB
 var tx *sql.Tx
 
+// Cleanup : close database connection and commit/rollback
 func Cleanup() {
-	database.Close()
 	err := tx.Commit()
 	if err != nil {
-		tx.Rollback()
+		log.Fatal("Could not commit current transaction", err)
+		err = tx.Rollback()
+		if err != nil {
+			log.Fatal("Failed to rollback transaction:", err)
+		}
+	}
+	err = database.Close()
+	if err != nil {
+		log.Fatal("Could not close database connection", err)
 	}
 }
 func init() {

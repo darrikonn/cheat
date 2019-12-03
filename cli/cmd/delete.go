@@ -4,6 +4,7 @@ import (
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 
+	"cheat/cli/cmd/exceptions"
 	"cheat/cli/db"
 	"cheat/cli/utils"
 )
@@ -19,7 +20,7 @@ var deleteCmd = &cobra.Command{
          the cheat to be deleted.`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		cheat := db.GetCheatById(args[0])
+		cheat := db.GetCheatByID(args[0])
 		utils.Render(
 			"    {BOLD}{id}{RESET}: {BOLD}{BLUE}{command}{RESET} {GREY}➞{RESET} {name}\n",
 			map[string]string{
@@ -35,7 +36,7 @@ var deleteCmd = &cobra.Command{
 
 		_, err := prompt.Run()
 		if err != nil {
-			panic(Abort)
+			panic(exceptions.Abort)
 		}
 
 		db.DeleteCheat(cheat.ID)

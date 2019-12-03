@@ -4,6 +4,7 @@ import (
 	"cheat/cli/utils"
 )
 
+// AddCheat : adds a new cheat to the database
 func AddCheat(command string, name string, description string, weight int) string {
 	id := utils.GenerateRandomID()
 
@@ -13,7 +14,7 @@ func AddCheat(command string, name string, description string, weight int) strin
       VALUES (?, ?, ?, ?, ?)
     `,
 	)
-	defer statement.Close()
+	defer utils.Check(statement.Close)
 	if err != nil {
 		panic(err)
 	}
@@ -26,13 +27,14 @@ func AddCheat(command string, name string, description string, weight int) strin
 	return id
 }
 
+// DeleteCheat : deletes a cheat from the database
 func DeleteCheat(id string) {
 	statement, err := database.Prepare(
 		`DELETE FROM cheat
      WHERE id = ?;
     `,
 	)
-	defer statement.Close()
+	defer utils.Check(statement.Close)
 	if err != nil {
 		panic(err)
 	}

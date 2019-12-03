@@ -4,12 +4,14 @@ import (
 	"database/sql"
 
 	"cheat/cli/models"
+	"cheat/cli/utils"
 )
 
-type Cheat = models.Cheat
+type cheat = models.Cheat
 
-func GetCheatById(id string) Cheat {
-	var cheat Cheat
+// GetCheatByID : returns a cheat by id from the database
+func GetCheatByID(id string) cheat {
+	var cheat cheat
 	row := database.QueryRow(`
     SELECT * FROM cheat
     WHERE id LIKE ('%' || $1 || '%')
@@ -29,8 +31,9 @@ func GetCheatById(id string) Cheat {
 	}
 }
 
-func SearchCheats(searchString string) []Cheat {
-	var cheats []Cheat
+// SearchCheats : query cheats from database by regex
+func SearchCheats(searchString string) []cheat {
+	var cheats []cheat
 	rows, err := database.Query(`
     SELECT * FROM cheat
     WHERE
@@ -41,13 +44,13 @@ func SearchCheats(searchString string) []Cheat {
     `,
 		searchString,
 	)
-	defer rows.Close()
+	defer utils.Check(rows.Close)
 	if err != nil {
 		panic(err)
 	}
 
 	for rows.Next() {
-		var cheat Cheat
+		var cheat cheat
 		err = rows.Scan(&cheat.ID, &cheat.Created, &cheat.Command, &cheat.Name, &cheat.Description, &cheat.Weight)
 		if err != nil {
 			panic(err)
@@ -58,20 +61,21 @@ func SearchCheats(searchString string) []Cheat {
 	return cheats
 }
 
-func GetCheats() []Cheat {
-	var cheats []Cheat
+// GetCheats : gets all cheats from database
+func GetCheats() []cheat {
+	var cheats []cheat
 	rows, err := database.Query(`
     SELECT * FROM cheat
     ORDER BY weight DESC;
     `,
 	)
-	defer rows.Close()
+	defer utils.Check(rows.Close)
 	if err != nil {
 		panic(err)
 	}
 
 	for rows.Next() {
-		var cheat Cheat
+		var cheat cheat
 		err = rows.Scan(&cheat.ID, &cheat.Created, &cheat.Command, &cheat.Name, &cheat.Description, &cheat.Weight)
 		if err != nil {
 			panic(err)
