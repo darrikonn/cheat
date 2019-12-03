@@ -41,8 +41,5 @@ deadcode:
 
 lint: golint vet errcheck deadcode
 
-imports:
-	go imports ./...
-
 format:
 	go fmt ./...
