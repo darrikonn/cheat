@@ -6,6 +6,8 @@ type AbortType struct {
 }
 
 // Abort : shorthand for AbortType for cleaner syntax
-var Abort = &AbortType{}
+func Abort(msg string) error {
+  return &AbortType{msg}
+}
 
 func (e *AbortType) Error() string { return e.msg }

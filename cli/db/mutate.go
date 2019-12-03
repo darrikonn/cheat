@@ -44,3 +44,22 @@ func DeleteCheat(id string) {
 		panic(err)
 	}
 }
+
+// EditCheat : edits cheat's attributes in the database
+func EditCheat(id string, name string, description string, weight int) {
+	statement, err := database.Prepare(
+		`UPDATE cheat
+		 SET name = ?, description = ?, weight = ?
+     WHERE id = ?;
+    `,
+	)
+	defer utils.Check(statement.Close)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = statement.Exec(name, description, weight, id)
+	if err != nil {
+		panic(err)
+	}
+}
