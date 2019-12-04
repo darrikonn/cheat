@@ -2,12 +2,17 @@ package cmd
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"cheat/cli/db"
 	"cheat/cli/utils"
 )
+
+var searchDescription string = strings.TrimSpace(`
+Search your cheats from a regex
+`)
 
 func init() {
 	rootCmd.AddCommand(searchCmd)
@@ -17,7 +22,7 @@ var searchCmd = &cobra.Command{
 	Use:     "search",
 	Aliases: []string{"s"},
 	Short:   "Search your cheats",
-	Long:    `Search your cheats from a regex`,
+	Long:    searchDescription,
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		cheats := db.SearchCheats(args[0])

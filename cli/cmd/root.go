@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -10,18 +11,21 @@ import (
 	"cheat/cli/utils"
 )
 
+var cheatDescription string = strings.TrimSpace(`
+A fast and flexible cheatsheet manager build with
+Go. Complete documentation is available at
+https://github.com/darrikonn/cheat/api.md
+`)
+
 var (
 	// Used for flags.
-	cfgFile string
 	verbose bool
 
 	rootCmd = &cobra.Command{
 		Use:     "cheat",
 		Version: "0.1.0",
 		Short:   "Cheat is a personal cheatsheet manager",
-		Long: `A fast and flexible cheatsheet manager build with
-           Go. Complete documentation is available at
-           https://github.com/darrikonn/cheat/api.md`,
+		Long:    cheatDescription,
 	}
 )
 
