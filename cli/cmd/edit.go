@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"strings"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
@@ -10,46 +12,57 @@ import (
 	"cheat/cli/utils"
 )
 
+var editDescription string = strings.TrimSpace(`
+Edit a cheat's "command", "name", and/or "description".
+Pass the "id" of the cheat to be edited.
+`)
+
+var (
+	editFlags = &struct {
+		name        string
+		description string
+		weight      int
+	}{}
+)
+
 func init() {
 	rootCmd.AddCommand(editCmd)
-	editCmd.Flags().StringVarP(&name, "name", "n", "", "name of the cheat")
-	editCmd.Flags().StringVarP(&description, "description", "d", "", "description of the cheat")
-	editCmd.Flags().IntVarP(&weight, "weight", "w", 0, "weight of the cheat; used for sorting query results")
+	editCmd.Flags().StringVarP(&editFlags.name, "name", "n", "", "name of the cheat")
+	editCmd.Flags().StringVarP(&editFlags.description, "description", "d", "", "description of the cheat")
+	editCmd.Flags().IntVarP(&editFlags.weight, "weight", "w", 0, "weight of the cheat; used for sorting query results")
 }
 
-func validateViewModel(cheat models.Cheat, flags *pflag.FlagSet) (string, string, int) {
+func validateViewModel(cheat models.Cheat, flags *pflag.FlagSet) {
 	nameChanged, descriptionChanged, weightChanged := true, true, true
 	if !flags.Changed("name") {
-		name = cheat.Name
+		editFlags.name = cheat.Name
 		nameChanged = false
 	}
 	if !flags.Changed("description") {
-		description = cheat.Description
+		editFlags.description = cheat.Description
 		descriptionChanged = false
 	}
 	if !flags.Changed("weight") {
-		weight = cheat.Weight
+		editFlags.weight = cheat.Weight
 		weightChanged = false
 	}
 
 	if !nameChanged && !descriptionChanged && !weightChanged {
 		panic(exceptions.Abort("Must provide at least one of \"name\", \"description\", \"weight\" when editing a cheat"))
-	} else {
-		return name, description, weight
 	}
 }
 
 var editCmd = &cobra.Command{
-	Use:   "edit",
-	Short: "Edit a cheat",
-	Long: `Edit a cheat's "command", "name", and/or "description".
-         Pass the "id" of the cheat to be edited.`,
-	Args: cobra.MinimumNArgs(1),
+	Use:     "edit",
+	Aliases: []string{"e"},
+	Short:   "Edit a cheat",
+	Long:    editDescription,
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		cheat := db.GetCheatByID(args[0])
 
-		name, description, weight = validateViewModel(cheat, cmd.Flags())
-		db.EditCheat(cheat.ID, name, description, weight)
+		validateViewModel(cheat, cmd.Flags())
+		db.EditCheat(cheat.ID, editFlags.name, editFlags.description, editFlags.weight)
 
 		utils.Render(
 			"Edited cheat {BOLD}{GREEN}{id}{RESET}",
