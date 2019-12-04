@@ -1,16 +1,16 @@
 ifeq ($(OS),Windows_NT)
-EXE=extension.exe
+EXE=cheat.exe
 RM=cmd /c del
 LDFLAG=
 else
-EXE=extension
+EXE=cheat
 RM=rm
 LDFLAG=-fPIC
 endif
 
 all: $(EXE) $(EXT)
 
-$(EXE): extension.go
+$(EXE): cli/cheat.go
 	go build $<
 
 clean:
