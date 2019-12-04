@@ -53,15 +53,14 @@ func errorHandling() {
 
 // Execute : executes the root command
 // that combines all cli subcommands
-func Execute() error {
+func Execute() {
 	defer errorHandling()
 	defer db.Cleanup()
 
-	return rootCmd.Execute()
+	// let deferred error handler take care of errors
+	_ = rootCmd.Execute()
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cheat.yaml)")
-	rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
 	rootCmd.PersistentFlags().BoolVar(&verbose, "verbose", false, "verbose output")
 }
