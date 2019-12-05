@@ -4,7 +4,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	"cheat/cli/cmd/exceptions"
 	db "cheat/cli/db"
@@ -92,6 +94,24 @@ func errorHandling() {
 	}
 }
 
+func initConfig() {
+	// Find home directory.
+	home, err := homedir.Dir()
+	if err != nil {
+		panic(err)
+	}
+
+	// Search config in home directory with name ".cheet" (without extension).
+	viper.AddConfigPath(home)
+	viper.SetConfigName(".cheet")
+
+	// Fallback to "vi" for the editor
+	viper.SetDefault("editor", utils.GetEnv("EDITOR", "vi"))
+	viper.SetDefault("database", "~/.cheetsheet.db")
+
+	// Load config
+	_ = viper.ReadInConfig()
+}
 // Execute : executes the root command
 // that combines all cli subcommands
 func Execute() {
