@@ -32,6 +32,17 @@ https://github.com/darrikonn/cheat/api.md
 	}
 )
 
+// Name returns the command's name: the first word in the use line.
+func init() {
+	initConfig()
+	rootCmd.PersistentFlags().BoolVar(&verbose, "verbose", false, "verbose output")
+	rootCmd.SetUsageTemplate(createUsageTemplate("cheat [regex] [command]"))
+	rootCmd.SetHelpCommand(&cobra.Command{
+		Use:    "no-help",
+		Hidden: true,
+	})
+}
+
 func setArgs() {
 	type _Argument struct {
 		value string
@@ -150,6 +161,8 @@ func Execute() {
 	// Set args for our API
 	setArgs()
 
-func init() {
-	rootCmd.PersistentFlags().BoolVar(&verbose, "verbose", false, "verbose output")
+	// Let deferred error handler take care of errors
+	defer errorHandling()
+
+	_ = rootCmd.Execute()
 }
