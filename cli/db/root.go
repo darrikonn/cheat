@@ -27,12 +27,16 @@ func Cleanup() {
 		panic(err)
 	}
 }
-func init() {
+
+// Setup : sets up the database and both
+// 1. Creates the database
+// 2. Initializes the necessary tables
+func Setup() {
 	var err error
 
-	homeDirectory, _ := os.UserHomeDir()
-	regex := func(re, s string) (bool, error) {
-		return regexp.MatchString(re, s)
+	databasePath := utils.ResolvePath(viper.GetString("database"))
+	if !utils.FileExists(databasePath) {
+		utils.CreateFile(databasePath)
 	}
 
 	sql.Register(
@@ -43,9 +47,10 @@ func init() {
 			},
 		},
 	)
+
 	database, err = sql.Open(
 		"sqlite3_with_regexp",
-		fmt.Sprintf("file:%s?mode=rw", homeDirectory+"/.cheetsheet.db"),
+		fmt.Sprintf("file:%s?mode=rw", databasePath),
 	)
 	if err != nil {
 		panic(err)

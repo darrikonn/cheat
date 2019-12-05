@@ -143,7 +143,8 @@ Use "{{.CommandPath}} [command] --help" for more information about a command.{{e
 // Execute : executes the root command
 // that combines all cli subcommands
 func Execute() {
-	defer errorHandling()
+	// Setup the database and defer clean it up
+	db.Setup()
 	defer db.Cleanup()
 
 	// Set args for our API
