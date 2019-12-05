@@ -1,25 +1,53 @@
 package utils
 
 import (
-	"math/rand"
-	"strconv"
-	"strings"
-	"time"
+	"io/ioutil"
+	"os"
+	"os/exec"
+
+	"github.com/spf13/viper"
 )
 
-// GenerateRandomID : randomly generates a random 6 digit integer, casted to string
-func GenerateRandomID() string {
-	rand.Seed(time.Now().UnixNano())
-	id := strconv.Itoa(rand.Intn(1000000)) // 10 ^ 6
-	return strings.Repeat("0", 6-len(id)) + id
+// GetEnv : gets environment variable with a fallback
+func GetEnv(key string, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }
 
-// SingularOrPlural : returns the pluralization of the noun
-func SingularOrPlural(word string, count int) string {
-	if count == 1 {
-		return word
+// GetUserInputFromEditor : creates a temp file where user can edit
+// their text in their preferred editor, and returns the
+// output from that temp file
+func GetUserInputFromEditor(existingContent string) string {
+	// Create tmp file
+	file, err := ioutil.TempFile("/tmp", "cheat")
+	if err != nil {
+		panic(err)
 	}
-	return word + "s"
+	defer func() {
+		err = os.Remove(file.Name())
+		if err != nil {
+			panic(err)
+		}
+	}()
+
+	// Write existing value to tmp file
+	err = ioutil.WriteFile(file.Name(), []byte(existingContent), 0644)
+	if err != nil {
+		panic(err)
+	}
+
+	// Open file for editing
+	cmd := exec.Command(viper.GetString("editor"), file.Name())
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	err = cmd.Run()
+	buf, err := ioutil.ReadFile(file.Name())
+	if err != nil {
+		panic(err)
+	}
+	return string(buf)
 }
 
 // Check : handle errors for defer functions
