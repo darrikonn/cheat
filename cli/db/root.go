@@ -3,14 +3,19 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"os"
 	"regexp"
 
 	"github.com/mattn/go-sqlite3"
+	"github.com/spf13/viper"
+
+	"cheat/cli/models"
+	"cheat/cli/utils"
 )
 
 var database *sql.DB
 var tx *sql.Tx
+
+type _Cheat = models.Cheat
 
 // Cleanup : close database connection and commit/rollback
 func Cleanup() {
