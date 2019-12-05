@@ -39,6 +39,10 @@ func Setup() {
 		utils.CreateFile(databasePath)
 	}
 
+	regex := func(re string, s string, ignoreCase bool) (bool, error) {
+		caseIgnore := map[bool]string{true: "(?i)", false: ""}[ignoreCase]
+		return regexp.MatchString(caseIgnore+re, s)
+	}
 	sql.Register(
 		"sqlite3_with_regexp",
 		&sqlite3.SQLiteDriver{
@@ -63,12 +67,11 @@ func Setup() {
 		panic(err)
 	}
 
+	// Initialize table
 	_, err = database.Exec(`
     CREATE TABLE IF NOT EXISTS cheat (
-      id TEXT PRIMARY KEY,
+      name TEXT PRIMARY KEY,
       created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      command TEXT NOT NULL,
-      name TEXT,
       description TEXT,
       weight INTEGER NOT NULL DEFAULT 0
     )

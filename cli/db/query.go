@@ -3,23 +3,20 @@ package db
 import (
 	"database/sql"
 
-	"cheat/cli/models"
 	"cheat/cli/utils"
 )
 
-type cheat = models.Cheat
-
-// GetCheatByID : returns a cheat by id from the database
-func GetCheatByID(id string) cheat {
-	var cheat cheat
+// GetCheatByName : returns a cheat by name from the database
+func GetCheatByName(name string, ignoreCase bool) _Cheat {
+	var cheat _Cheat
 	row := database.QueryRow(`
-    SELECT * FROM cheat
-    WHERE id LIKE ('%' || $1 || '%')
-    ORDER BY weight;
+    SELECT name, created, description, weight FROM cheat
+    WHERE regexp($1, name, $2)
+    ORDER BY name ASC;
     `,
-		id,
+		name, ignoreCase,
 	)
-	err := row.Scan(&cheat.ID, &cheat.Created, &cheat.Command, &cheat.Name, &cheat.Description, &cheat.Weight)
+	err := row.Scan(&cheat.Name, &cheat.Created, &cheat.Description, &cheat.Weight)
 
 	switch err {
 	case sql.ErrNoRows:
@@ -32,17 +29,18 @@ func GetCheatByID(id string) cheat {
 }
 
 // SearchCheats : query cheats from database by regex
-func SearchCheats(searchString string) []cheat {
-	var cheats []cheat
+func SearchCheats(searchString string, ignoreCase bool) []_Cheat {
+	var cheats []_Cheat
 	rows, err := database.Query(`
-    SELECT * FROM cheat
+    SELECT name, created, description, weight FROM cheat
     WHERE
-      command regexp $1
-      OR name regexp $1
-      OR description regexp $1
-    ORDER BY weight DESC;
+      regexp($1, name, $2)
+      OR regexp($1, description, $2)
+    ORDER BY
+      weight DESC,
+      description;
     `,
-		searchString,
+		searchString, ignoreCase,
 	)
 	defer utils.Check(rows.Close)
 	if err != nil {
@@ -50,33 +48,8 @@ func SearchCheats(searchString string) []cheat {
 	}
 
 	for rows.Next() {
-		var cheat cheat
-		err = rows.Scan(&cheat.ID, &cheat.Created, &cheat.Command, &cheat.Name, &cheat.Description, &cheat.Weight)
-		if err != nil {
-			panic(err)
-		}
-
-		cheats = append(cheats, cheat)
-	}
-	return cheats
-}
-
-// GetCheats : gets all cheats from database
-func GetCheats() []cheat {
-	var cheats []cheat
-	rows, err := database.Query(`
-    SELECT * FROM cheat
-    ORDER BY weight DESC;
-    `,
-	)
-	defer utils.Check(rows.Close)
-	if err != nil {
-		panic(err)
-	}
-
-	for rows.Next() {
-		var cheat cheat
-		err = rows.Scan(&cheat.ID, &cheat.Created, &cheat.Command, &cheat.Name, &cheat.Description, &cheat.Weight)
+		var cheat _Cheat
+		err = rows.Scan(&cheat.Name, &cheat.Created, &cheat.Description, &cheat.Weight)
 		if err != nil {
 			panic(err)
 		}

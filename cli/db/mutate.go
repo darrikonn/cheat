@@ -5,13 +5,11 @@ import (
 )
 
 // AddCheat : adds a new cheat to the database
-func AddCheat(command string, name string, description string, weight int) string {
-	id := utils.GenerateRandomID()
-
+func AddCheat(name string, description string, weight int) string {
 	statement, err := database.Prepare(
 		`INSERT INTO cheat (
-      id, command, name, description, weight)
-      VALUES (?, ?, ?, ?, ?)
+      name, description, weight)
+      VALUES (?, ?, ?)
     `,
 	)
 	defer utils.Check(statement.Close)
@@ -19,19 +17,19 @@ func AddCheat(command string, name string, description string, weight int) strin
 		panic(err)
 	}
 
-	_, err = statement.Exec(id, command, name, description, weight)
+	_, err = statement.Exec(name, description, weight)
 	if err != nil {
 		panic(err)
 	}
 
-	return id
+	return name
 }
 
 // DeleteCheat : deletes a cheat from the database
-func DeleteCheat(id string) {
+func DeleteCheat(name string) {
 	statement, err := database.Prepare(
 		`DELETE FROM cheat
-     WHERE id = ?;
+     WHERE name = ?;
     `,
 	)
 	defer utils.Check(statement.Close)
@@ -39,18 +37,18 @@ func DeleteCheat(id string) {
 		panic(err)
 	}
 
-	_, err = statement.Exec(id)
+	_, err = statement.Exec(name)
 	if err != nil {
 		panic(err)
 	}
 }
 
-// EditCheat : edits cheat's attributes in the database
-func EditCheat(id string, name string, description string, weight int) {
+// RenameCheat : renames cheat's name (PK) in the database
+func RenameCheat(name string, newName string) _Cheat {
 	statement, err := database.Prepare(
 		`UPDATE cheat
-		 SET name = ?, description = ?, weight = ?
-     WHERE id = ?;
+		 SET name = ?
+     WHERE name = ?;
     `,
 	)
 	defer utils.Check(statement.Close)
@@ -58,7 +56,28 @@ func EditCheat(id string, name string, description string, weight int) {
 		panic(err)
 	}
 
-	_, err = statement.Exec(name, description, weight, id)
+	_, err = statement.Exec(newName, name)
+	if err != nil {
+		panic(err)
+	}
+
+	return GetCheatByName(newName, false)
+}
+
+// EditCheat : edits cheat's attributes in the database
+func EditCheat(name string, description string, weight int) {
+	statement, err := database.Prepare(
+		`UPDATE cheat
+		 SET description = ?, weight = ?
+     WHERE name = ?;
+    `,
+	)
+	defer utils.Check(statement.Close)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = statement.Exec(description, weight, name)
 	if err != nil {
 		panic(err)
 	}
