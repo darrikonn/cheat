@@ -11,56 +11,55 @@ import (
 	"cheat/cli/utils"
 )
 
-var deleteDescription string = strings.TrimSpace(`
-Delete a cheat from your cheatsheet. Pass the "id" of
-the cheat to be deleted.
-`)
-
 var (
 	deleteFlags = &struct {
-		yes bool
+		yes        bool
+		ignoreCase bool
 	}{}
 )
 
 func init() {
 	rootCmd.AddCommand(deleteCmd)
 	deleteCmd.Flags().BoolVarP(&deleteFlags.yes, "yes", "y", false, "Skip prompt")
+	deleteCmd.Flags().BoolVarP(&deleteFlags.ignoreCase, "ignore-case", "i", false, "Case insensitive search")
+	deleteCmd.SetUsageTemplate(createUsageTemplate("cheat [regex] delete [flags]"))
 }
 
 var deleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"d"},
 	Short:   "Delete a cheat",
-	Long:    deleteDescription,
-	Args:    cobra.MinimumNArgs(1),
+	Long: strings.TrimSpace(`
+Delete a cheat from your cheatsheet.
+`),
+
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		cheat := db.GetCheatByID(args[0])
+		cheat := db.GetCheatByName(args[0], deleteFlags.ignoreCase)
 		if !deleteFlags.yes {
 			utils.Render(
-				"    {BOLD}{id}{RESET}: {BOLD}{BLUE}{command}{RESET} {GREY}➞{RESET} {name}\n",
+				"    {BOLD}{name}{RESET}: {description}\n",
 				map[string]string{
-					"id":      cheat.ID,
-					"command": cheat.Command,
-					"name":    cheat.Name,
+					"name":        cheat.Name,
+					"description": utils.GetFirstLine(cheat.Description),
 				},
 			)
 
 			prompt := promptui.Prompt{
-				Label:     "Are you sure you want to delete <Cheat: " + cheat.ID + ">",
+				Label:     "Are you sure you want to delete <Cheat: " + cheat.Name + ">",
 				IsConfirm: true,
 			}
 			_, err := prompt.Run()
 			if err != nil {
-				panic(exceptions.Abort)
+				panic(exceptions.Abort(""))
 			}
 		}
 
-		db.DeleteCheat(cheat.ID)
+		db.DeleteCheat(cheat.Name)
 		utils.Render(
-			"{RED}Deleted{RESET} {BOLD}{id}{RESET}: {command}",
+			"{RED}Deleted{RESET} {BOLD}{name}{RESET}",
 			map[string]string{
-				"id":      cheat.ID,
-				"command": cheat.Command,
+				"name": cheat.Name,
 			},
 		)
 	},

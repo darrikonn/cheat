@@ -9,41 +9,49 @@ import (
 	"cheat/cli/utils"
 )
 
-var getDescription string = strings.TrimSpace(`
-Get a cheat info by id
-`)
+var (
+	getFlags = &struct {
+		ignoreCase bool
+	}{}
+)
 
 func init() {
 	rootCmd.AddCommand(getCmd)
+	getCmd.Flags().BoolVarP(&getFlags.ignoreCase, "ignore-case", "i", false, "Case insensitive search")
+	getCmd.SetUsageTemplate(createUsageTemplate("cheat [regex] get [flags]"))
 }
 
 var getCmd = &cobra.Command{
 	Use:     "get",
 	Aliases: []string{"g"},
 	Short:   "Get cheat info",
-	Long:    getDescription,
-	Args:    cobra.MinimumNArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		cheat := db.GetCheatByID(args[0])
+	Long: strings.TrimSpace(`
+Get a cheat info by name
+`),
 
-		// header
+	Args: cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		cheat := db.GetCheatByName(args[0], getFlags.ignoreCase)
+
+		// Header
 		utils.Render(
-			"    {BOLD}{BLUE}{command}{RESET}\n",
-			map[string]string{"command": cheat.Command},
+			"    {BOLD}{BLUE}{name}{RESET}\n",
+			map[string]string{"name": cheat.Name},
 		)
 
-		// body
+		// Body
 		utils.Render(
-			cheat.Description,
+			strings.TrimSpace(cheat.Description),
 			nil,
 		)
 
-		// footer
+		// Footer
 		utils.Render(
-			"\n{GREY}{BOLD}{id}{RESET}: {GREY}{name}{RESET}",
+			"\n{BOLD}{GREY}{name}{RESET}{GREY}{split} {description}{RESET}",
 			map[string]string{
-				"id":   cheat.ID,
-				"name": cheat.Name,
+				"name":        cheat.Name,
+				"split":       map[bool]string{true: " :", false: ""}[cheat.Description != ""],
+				"description": utils.GetFirstLine(cheat.Description),
 			},
 		)
 	},

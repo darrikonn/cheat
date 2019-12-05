@@ -11,23 +11,64 @@ import (
 	"cheat/cli/utils"
 )
 
-var cheatDescription string = strings.TrimSpace(`
-A fast and flexible cheatsheet manager build with
-Go. Complete documentation is available at
-https://github.com/darrikonn/cheat/api.md
-`)
-
 var (
 	// Used for flags.
 	verbose bool
 
+	defaultCommand string = "search"
+
 	rootCmd = &cobra.Command{
-		Use:     "cheat",
-		Version: "0.1.0",
-		Short:   "Cheat is a personal cheatsheet manager",
-		Long:    cheatDescription,
+		Use:          "cheat",
+		Version:      "0.1.0",
+		SilenceUsage: true,
+		Short:        "Cheat is a personal cheatsheet manager",
+		Long: strings.TrimSpace(`
+A fast and flexible cheatsheet manager built with
+Go. Complete documentation is available at
+https://github.com/darrikonn/cheat/api.md
+`),
 	}
 )
+
+func setArgs() {
+	type _Argument struct {
+		value string
+		index int
+	}
+	regex := &_Argument{value: "", index: -1}
+	target := &_Argument{value: defaultCommand, index: -1}
+
+	// Traverse args to find regex and target
+	args := os.Args[1:]
+	for i, arg := range args {
+		if !strings.HasPrefix(arg, "-") {
+			if regex.index < 0 {
+				regex = &_Argument{value: arg, index: i}
+			} else if target.index < 0 {
+				target = &_Argument{value: arg, index: i}
+				break
+			}
+		}
+	}
+
+	// Flip regex and target
+	regexFound := regex.index >= 0
+	targetFound := target.index >= 0
+	if regexFound {
+		args = utils.RemoveAtIndex(args, regex.index)
+		if targetFound {
+			args = utils.RemoveAtIndex(args, target.index-1)
+		}
+	}
+
+	if !regexFound && !targetFound && utils.ContainsAny(args, "--help", "-h") {
+		// No command initiated, but help requested
+		return
+	}
+
+  // Finally set the args
+  rootCmd.SetArgs(append([]string{target.value, regex.value}, args...))
+}
 
 func errorHandling() {
 	err := recover()
@@ -57,9 +98,8 @@ func Execute() {
 	defer errorHandling()
 	defer db.Cleanup()
 
-	// let deferred error handler take care of errors
-	_ = rootCmd.Execute()
-}
+	// Set args for our API
+	setArgs()
 
 func init() {
 	rootCmd.PersistentFlags().BoolVar(&verbose, "verbose", false, "verbose output")

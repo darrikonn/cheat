@@ -10,46 +10,48 @@ import (
 	"cheat/cli/utils"
 )
 
-var searchDescription string = strings.TrimSpace(`
-Search your cheats from a regex
-`)
+var (
+	searchFlags = &struct {
+		ignoreCase bool
+	}{}
+)
 
 func init() {
 	rootCmd.AddCommand(searchCmd)
+	searchCmd.Flags().BoolVarP(&searchFlags.ignoreCase, "ignore-case", "i", false, "Case insensitive search")
+	searchCmd.SetUsageTemplate(createUsageTemplate("cheat [regex] [flags]"))
 }
 
 var searchCmd = &cobra.Command{
-	Use:     "search",
-	Aliases: []string{"s"},
-	Short:   "Search your cheats",
-	Long:    searchDescription,
-	Args:    cobra.MinimumNArgs(1),
+	Use:   "search",
+	Short: "Search your cheats from regex",
+	Long: strings.TrimSpace(`
+Search your cheats from a regex
+`),
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		cheats := db.SearchCheats(args[0])
+		cheats := db.SearchCheats(args[0], searchFlags.ignoreCase)
 
-		// header
+		// Header
 		utils.Render(
-			"    {search}\n",
-			map[string]string{
-				"search": args[0],
-			},
+			"    showing {BOLD}[name] : [summary]{RESET}\n", nil,
 		)
 
-		// body
+		// Body
 		for _, cheat := range cheats {
 			utils.Render(
-				"{BOLD}{id}{RESET}: {BOLD}{BLUE}{command}{RESET} {GREY}➞{RESET} {name}",
+				"{BOLD}{BLUE}{name}{RESET}{split} {description}{RESET}",
 				map[string]string{
-					"id":      cheat.ID,
-					"command": cheat.Command,
-					"name":    cheat.Name,
+					"name":        cheat.Name,
+					"split":       map[bool]string{true: " :", false: ""}[cheat.Description != ""],
+					"description": utils.GetFirstLine(cheat.Description),
 				},
 			)
 		}
 
-		// footer
+		// Footer
 		utils.Render(
-			"\n{GREY}{BOLD}{items}{RESET}{GREY} {plural} match your search",
+			"\n{GREY}{BOLD}{items}{RESET}{GREY} {plural} stored",
 			map[string]string{
 				"items":  strconv.Itoa(len(cheats)),
 				"plural": utils.SingularOrPlural("cheat", len(cheats)),
