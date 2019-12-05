@@ -56,3 +56,15 @@ func Check(f func() error) {
 		panic(err)
 	}
 }
+
+// ContainsAny : returns true if target contains any of strings
+func ContainsAny(target []string, matches ...string) bool {
+	for _, t := range target {
+		for _, match := range matches {
+			if t == match {
+				return true
+			}
+		}
+	}
+	return false
+}
