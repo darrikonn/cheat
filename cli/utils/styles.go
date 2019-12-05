@@ -1,12 +1,12 @@
 package utils
 
 var styles = map[string]string{
-	// ansi styles
+	// Ansi styles
 	"RESET":  "\033[0m",
 	"BOLD":   "\033[1m",
 	"NORMAL": "\033[22m",
 
-	// ansi fore
+	// Ansi fore
 	"BLACK":   "\033[30m",
 	"RED":     "\033[31m",
 	"GREEN":   "\033[32m",
