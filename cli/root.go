@@ -1,9 +1,9 @@
-package main
+package cli
 
 import (
 	"cheat/cli/cmd"
 )
 
-func main() {
+func Run() {
 	cmd.Execute()
 }
