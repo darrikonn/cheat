@@ -6,8 +6,8 @@ import (
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 
-	"cheat/cli/cmd/exceptions"
 	"cheat/cli/db"
+	"cheat/cli/exceptions"
 	"cheat/cli/utils"
 )
 

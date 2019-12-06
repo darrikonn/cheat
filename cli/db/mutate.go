@@ -1,7 +1,7 @@
 package db
 
 import (
-	"cheat/cli/cmd/exceptions"
+	"cheat/cli/exceptions"
 	"cheat/cli/utils"
 )
 

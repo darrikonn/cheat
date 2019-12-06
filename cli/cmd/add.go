@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"cheat/cli/cmd/exceptions"
 	"cheat/cli/db"
+	"cheat/cli/exceptions"
 	"cheat/cli/utils"
 	"strings"
 

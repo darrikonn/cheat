@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/viper"
 
-	"cheat/cli/cmd/exceptions"
+	"cheat/cli/exceptions"
 )
 
 // GetEnv : gets environment variable with a fallback

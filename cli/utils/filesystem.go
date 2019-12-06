@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"cheat/cli/cmd/exceptions"
+	"cheat/cli/exceptions"
 )
 
 // ResolvePath : resolves path; relative/expanding

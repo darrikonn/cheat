@@ -7,8 +7,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"cheat/cli/cmd/exceptions"
 	db "cheat/cli/db"
+	"cheat/cli/exceptions"
 	"cheat/cli/utils"
 )
 

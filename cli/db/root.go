@@ -8,7 +8,7 @@ import (
 	"github.com/mattn/go-sqlite3"
 	"github.com/spf13/viper"
 
-	"cheat/cli/cmd/exceptions"
+	"cheat/cli/exceptions"
 	"cheat/cli/models"
 	"cheat/cli/utils"
 )
