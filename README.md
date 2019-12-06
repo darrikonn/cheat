@@ -1,9 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/darrikonn/cheat/master/img/cheat.png" width=80 alt="Icon"/>
-</p>
-
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/5694851/67482097-be2ecc80-f652-11e9-899d-1d9750929b7e.png" />
+    <img src="https://user-images.githubusercontent.com/5694851/70360689-1fafa100-1877-11ea-8c2a-92386220ae63.png" alt="Icon"/>
   <br />
   <br />
   <a href="https://pypi.org/project/cheat/">
