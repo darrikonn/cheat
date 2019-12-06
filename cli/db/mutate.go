@@ -1,6 +1,7 @@
 package db
 
 import (
+	"cheat/cli/cmd/exceptions"
 	"cheat/cli/utils"
 )
 
@@ -14,12 +15,12 @@ func AddCheat(name string, description string, weight int) string {
 	)
 	defer utils.Check(statement.Close)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not prepare database statement to add a new cheat", err))
 	}
 
 	_, err = statement.Exec(name, description, weight)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not execute database statement to add a new cheat", err))
 	}
 
 	return name
@@ -34,12 +35,12 @@ func DeleteCheat(name string) {
 	)
 	defer utils.Check(statement.Close)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not prepare database statement to delete <Cheat: "+name+">", err))
 	}
 
 	_, err = statement.Exec(name)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not execute database statement to delete <Cheat: "+name+">", err))
 	}
 }
 
@@ -53,12 +54,12 @@ func RenameCheat(name string, newName string) _Cheat {
 	)
 	defer utils.Check(statement.Close)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not prepare database statement to rename <Cheat: "+name+"> to \""+newName+"\"", err))
 	}
 
 	_, err = statement.Exec(newName, name)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not execute database statement to rename <Cheat: "+name+"> to \""+newName+"\"", err))
 	}
 
 	return GetCheatByName(newName, false)
@@ -74,11 +75,11 @@ func EditCheat(name string, description string, weight int) {
 	)
 	defer utils.Check(statement.Close)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not prepare database statement to edit <Cheat: "+name+">", err))
 	}
 
 	_, err = statement.Exec(description, weight, name)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not execute database statement to edit <Cheat: "+name+">", err))
 	}
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/mattn/go-sqlite3"
 	"github.com/spf13/viper"
 
+	"cheat/cli/cmd/exceptions"
 	"cheat/cli/models"
 	"cheat/cli/utils"
 )
@@ -23,13 +24,13 @@ func Cleanup() {
 	if err != nil {
 		err = tx.Rollback()
 		if err != nil {
-			panic(err)
+			panic(exceptions.CheatException("Could not rollback database transaction", err))
 		}
-		panic(err)
+		panic(exceptions.CheatException("Could not commit database transaction", err))
 	}
 	err = database.Close()
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not close database connection", err))
 	}
 }
 
@@ -62,14 +63,14 @@ func Setup() {
 		fmt.Sprintf("file:%s?mode=rw", databasePath),
 	)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not establish database connection", err))
 	}
 
 	// Force db to make a new connection in pool
 	// by putting the original in a transaction
 	tx, err = database.Begin()
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not start a new transaction in database pool", err))
 	}
 
 	// Initialize table
@@ -82,6 +83,6 @@ func Setup() {
     )
   `)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not initialize database with table \"cheat\"", err))
 	}
 }

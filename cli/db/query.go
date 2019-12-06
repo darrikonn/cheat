@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 
+	"cheat/cli/cmd/exceptions"
 	"cheat/cli/utils"
 )
 
@@ -20,11 +21,11 @@ func GetCheatByName(name string, ignoreCase bool) _Cheat {
 
 	switch err {
 	case sql.ErrNoRows:
-		panic(err)
+		panic(exceptions.CheatException("<Cheat: "+name+"> could not be found!", err))
 	case nil:
 		return cheat
 	default:
-		panic(err)
+		panic(exceptions.CheatException("Unknown exception occurred", err))
 	}
 }
 
@@ -42,16 +43,17 @@ func SearchCheats(searchString string, ignoreCase bool) []_Cheat {
     `,
 		searchString, ignoreCase,
 	)
+	// TODO:
 	defer utils.Check(rows.Close)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not query database from regex: \""+searchString+"\"", err))
 	}
 
 	for rows.Next() {
 		var cheat _Cheat
 		err = rows.Scan(&cheat.Name, &cheat.Created, &cheat.Description, &cheat.Weight)
 		if err != nil {
-			panic(err)
+			panic(exceptions.CheatException("Could not scan database row from query", err))
 		}
 
 		cheats = append(cheats, cheat)

@@ -6,6 +6,8 @@ import (
 	"os/exec"
 
 	"github.com/spf13/viper"
+
+	"cheat/cli/cmd/exceptions"
 )
 
 // GetEnv : gets environment variable with a fallback
@@ -23,19 +25,19 @@ func GetUserInputFromEditor(existingContent string) string {
 	// Create tmp file
 	file, err := ioutil.TempFile("/tmp", "cheat")
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not create a tmp file at \"/tmp/…\"", err))
 	}
 	defer func() {
 		err = os.Remove(file.Name())
 		if err != nil {
-			panic(err)
+			panic(exceptions.CheatException("Could not delete tmp file: \""+file.Name()+"\"", err))
 		}
 	}()
 
 	// Write existing value to tmp file
 	err = ioutil.WriteFile(file.Name(), []byte(existingContent), 0644)
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not write to tmp file: \""+file.Name()+"\"", err))
 	}
 
 	// Open file for editing
@@ -45,7 +47,7 @@ func GetUserInputFromEditor(existingContent string) string {
 	err = cmd.Run()
 	buf, err := ioutil.ReadFile(file.Name())
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not read from tmp file: \""+file.Name()+"\"", err))
 	}
 	return string(buf)
 }
@@ -54,6 +56,7 @@ func GetUserInputFromEditor(existingContent string) string {
 func Check(f func() error) {
 	if err := f(); err != nil {
 		panic(err)
+		// TODO:
 	}
 }
 

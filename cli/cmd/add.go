@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"cheat/cli/cmd/exceptions"
 	"cheat/cli/db"
 	"cheat/cli/utils"
 	"strings"
@@ -32,6 +33,11 @@ the cheat's "description" in your preferred editor.
 
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		cheat := db.GetCheatByName(args[0], false)
+		if cheat.Name == args[0] {
+			panic(exceptions.CheatException("<Cheat: "+args[0]+"> already exists!", nil))
+		}
+
 		name := db.AddCheat(args[0], utils.GetUserInputFromEditor("<summary>\n\n<description>"), addFlags.weight)
 		utils.Render(
 			"Created cheat {BOLD}{GREEN}{name}{RESET}",

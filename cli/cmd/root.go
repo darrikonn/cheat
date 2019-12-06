@@ -4,7 +4,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -89,9 +88,15 @@ func errorHandling() {
 		switch err.(type) {
 		case *exceptions.AbortType:
 			utils.Render("Abort!", nil)
-			msg := err.(*exceptions.AbortType).Error()
-			if msg != "" {
-				utils.Render("{RED}{msg}{RESET}", map[string]string{"msg": msg})
+			message := err.(*exceptions.AbortType).Error()
+			if message != "" {
+				utils.Render("{RED}{message}{RESET}", map[string]string{"message": message})
+			}
+		case *exceptions.CheatExceptionType:
+			utils.Render("{RED}Error{RESET}:", nil)
+			utils.Render(err.(*exceptions.CheatExceptionType).Error(), nil)
+			if verbose && err.(*exceptions.CheatExceptionType).Original() != nil {
+				panic(err.(*exceptions.CheatExceptionType).Original())
 			}
 		default:
 			if verbose {
@@ -107,13 +112,13 @@ func errorHandling() {
 
 func initConfig() {
 	// Find home directory.
-	home, err := homedir.Dir()
+	homeDirectory, err := os.UserHomeDir()
 	if err != nil {
-		panic(err)
+		panic(exceptions.CheatException("Could not find home directory", err))
 	}
 
 	// Search config in home directory with name ".cheet" (without extension).
-	viper.AddConfigPath(home)
+	viper.AddConfigPath(homeDirectory)
 	viper.SetConfigName(".cheet")
 
 	// Fallback to "vi" for the editor
