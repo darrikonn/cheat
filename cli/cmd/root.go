@@ -79,8 +79,8 @@ func setArgs() {
 		return
 	}
 
-  // Finally set the args
-  rootCmd.SetArgs(append([]string{target.value, regex.value}, args...))
+	// Finally set the args
+	rootCmd.SetArgs(append([]string{target.value, regex.value}, args...))
 }
 
 func errorHandling() {
