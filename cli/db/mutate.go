@@ -13,7 +13,7 @@ func AddCheat(name string, description string, weight int) string {
       VALUES (?, ?, ?)
     `,
 	)
-	defer utils.Check(statement.Close)
+	defer utils.Check(statement.Close, "Could not close statement preparation to add a new cheat")
 	if err != nil {
 		panic(exceptions.CheatException("Could not prepare database statement to add a new cheat", err))
 	}
@@ -33,7 +33,7 @@ func DeleteCheat(name string) {
      WHERE name = ?;
     `,
 	)
-	defer utils.Check(statement.Close)
+	defer utils.Check(statement.Close, "Could not close statement preparation to delete <Cheat: "+name+">")
 	if err != nil {
 		panic(exceptions.CheatException("Could not prepare database statement to delete <Cheat: "+name+">", err))
 	}
@@ -52,7 +52,7 @@ func RenameCheat(name string, newName string) _Cheat {
      WHERE name = ?;
     `,
 	)
-	defer utils.Check(statement.Close)
+	defer utils.Check(statement.Close, "Could not close statement preparation to rename <Cheat: "+name+"> to \""+newName+"\"")
 	if err != nil {
 		panic(exceptions.CheatException("Could not prepare database statement to rename <Cheat: "+name+"> to \""+newName+"\"", err))
 	}
@@ -73,7 +73,7 @@ func EditCheat(name string, description string, weight int) {
      WHERE name = ?;
     `,
 	)
-	defer utils.Check(statement.Close)
+	defer utils.Check(statement.Close, "Could not close statement preparation to edit <Cheat: "+name+">")
 	if err != nil {
 		panic(exceptions.CheatException("Could not prepare database statement to edit <Cheat: "+name+">", err))
 	}

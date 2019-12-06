@@ -43,8 +43,7 @@ func SearchCheats(searchString string, ignoreCase bool) []_Cheat {
     `,
 		searchString, ignoreCase,
 	)
-	// TODO:
-	defer utils.Check(rows.Close)
+	defer utils.Check(rows.Close, "Could not close rows returned by regex search query")
 	if err != nil {
 		panic(exceptions.CheatException("Could not query database from regex: \""+searchString+"\"", err))
 	}

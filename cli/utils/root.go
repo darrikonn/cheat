@@ -53,10 +53,9 @@ func GetUserInputFromEditor(existingContent string) string {
 }
 
 // Check : handle errors for defer functions
-func Check(f func() error) {
+func Check(f func() error, reason string) {
 	if err := f(); err != nil {
-		panic(err)
-		// TODO:
+		panic(exceptions.CheatException(reason, err))
 	}
 }
 
