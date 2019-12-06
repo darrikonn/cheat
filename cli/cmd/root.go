@@ -26,7 +26,7 @@ var (
 		Long: strings.TrimSpace(`
 A fast and flexible cheatsheet manager built with
 Go. Complete documentation is available at
-https://github.com/darrikonn/cheat/api.md
+https://github.com/darrikonn/cheat/API.md
 `),
 	}
 )

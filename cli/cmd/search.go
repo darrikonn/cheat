@@ -24,9 +24,9 @@ func init() {
 
 var searchCmd = &cobra.Command{
 	Use:   "search",
-	Short: "Search your cheats from regex",
+	Short: "Search cheats from regex",
 	Long: strings.TrimSpace(`
-Search your cheats from a regex
+Search cheats from a regex
 `),
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
