@@ -2,19 +2,14 @@ version: 2.1
 description: |
   Installs dev and packaging dependencies and builds cli
 
-
 workflows:
   version: 2.1
   cheat:
     jobs:
-      - lint_and_build:
-          context: "latest"
-      - lint_and_build:
-          context: "1.13"
-      - lint_and_build:
-          context: "1.12"
-      - lint_and_build:
-          context: "1.11"
+      - go-latest
+      - go-one-thirteen
+      - go-one-twelve
+      - go-one-eleven
       - release:
           # Only run this job on git tag pushes
           filters:
@@ -30,45 +25,66 @@ executors:
       version:
         description: Go version to use
         type: string
-        default: "latest"
+        default: 'latest'
     docker:
       - image: circleci/golang:<<parameters.version>>
 
 references:
-  workspace: &workspace
-    /go/src/github.com/spf13/cobra
+  workspace: &workspace /go/src/github.com/spf13/cobra
   lint: &lint
     run:
-      name: "Lint"
+      name: 'Lint'
       command: make lint
   build: &build
     run:
-      name: "build"
+      name: 'build'
       command: go build
 
 commands:
-  setup:
+  lint_and_build:
     description: |
       Installs all dependencies (dev as well)
     steps:
+      - checkout
       - run:
-          name: "Install requirements"
+          name: 'Install requirements'
           command: make requirements
       - run:
-          name: "Install dev requirements"
+          name: 'Install dev requirements'
           command: make dev-requirements
-
-jobs:
-  lint_and_build:
-    executor:
-      name: go
-      version: "$GO_VERSION"
-    working_directory: *workspace
-    steps:
-      - checkout
-      - setup
       - *lint
       - *build
+
+jobs:
+  go-latest:
+    executor:
+      name: go
+      version: '1.13'
+    working_directory: *workspace
+    steps:
+      - lint_and_build
+  go-one-thirteen:
+    executor:
+      name: go
+      version: '1.13'
+    working_directory: *workspace
+    steps:
+      - lint_and_build
+  go-one-twelve:
+    executor:
+      name: go
+      version: '1.13'
+    working_directory: *workspace
+    steps:
+      - lint_and_build
+  go-one-eleven:
+    executor:
+      name: go
+      version: '1.13'
+    working_directory: *workspace
+    steps:
+      - lint_and_build
+
   release:
     docker:
       - image: circleci/golang:1.13
