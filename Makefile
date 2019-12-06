@@ -17,6 +17,9 @@ clean:
 	@-$(RM) $(EXE) $(EXT)
 
 requirements:
+	go get -t
+
+dev-requirements:
 	@while read in; do \
 		echo "$$in"; \
 		eval "$$in"; \
