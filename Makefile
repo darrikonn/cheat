@@ -8,17 +8,16 @@ RM=rm
 LDFLAG=-fPIC
 endif
 
-all: $(EXE) $(EXT)
-
 $(EXE): cli/cheat.go
 	go build $<
 
 clean:
-	@-$(RM) $(EXE) $(EXT)
+	@-$(RM) $(EXE)
 
 requirements:
 	go get -t ./...
 
+### DEVELOPMENT ###
 dev-requirements:
 	@while read in; do \
 		echo "$$in"; \
@@ -41,3 +40,8 @@ lint: golint vet errcheck deadcode
 
 format:
 	go fmt ./...
+
+### DEPLOYMENT ###
+github-release:
+	./bin/push_tag.sh
+

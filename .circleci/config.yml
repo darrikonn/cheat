@@ -15,6 +15,13 @@ workflows:
           context: "1.12"
       - lint_and_build:
           context: "1.11"
+      - release:
+          # Only run this job on git tag pushes
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*(-.*)*/
 
 executors:
   go:
@@ -62,3 +69,9 @@ jobs:
       - setup
       - *lint
       - *build
+  release:
+    docker:
+      - image: circleci/golang:1.13
+    steps:
+      - checkout
+      - run: curl -sL https://git.io/goreleaser | bash
