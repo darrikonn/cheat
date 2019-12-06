@@ -73,7 +73,7 @@ func setArgs() {
 		}
 	}
 
-	if !regexFound && !targetFound && utils.ContainsAny(args, "--help", "-h") {
+	if !regexFound && !targetFound && utils.ContainsAny(args, "--help", "-h", "--version", "-v") {
 		// No command initiated, but help requested
 		return
 	}
