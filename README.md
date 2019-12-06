@@ -44,11 +44,9 @@ Here are some to get you started:
 Check out the [`api`](https://github.com/darrikonn/cheat/blob/master/API.md).
 
 ## Configuring
-### Database name
-Your database instance will be located in your home directory (`~/`).
-By default it'll be named `.cheetsheet.db`.
-
-You can change your database name by specifying `database` in your `~/.cheat.yaml` file:
+### Database
+By default the database will be located at `~/.cheetsheet.db`.
+You can change your database path, and name, by specifying `database` in your `~/.cheat.yaml` file:
 ```yaml
 database: ~/.custom-database-name.db
 ```
@@ -62,7 +60,7 @@ editor: nvim
 If no *editor* config is specified, the editor will fallback to your `EDITOR` environment variable. If that can't be found, the default selected editor will be `vi`.
 
 ## Tags
-A need way to search your cheats, is by describing them with tags.
+A neat way to search your cheats, is by describing them with tags.
 ```txt
 my summary
 tags: [awesome, golang]
