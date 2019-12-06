@@ -17,7 +17,7 @@ clean:
 	@-$(RM) $(EXE) $(EXT)
 
 requirements:
-	go get -t
+	go get -t ./...
 
 dev-requirements:
 	@while read in; do \
