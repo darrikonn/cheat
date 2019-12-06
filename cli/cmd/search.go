@@ -34,7 +34,8 @@ Search your cheats from a regex
 
 		// Header
 		utils.Render(
-			"    showing {BOLD}[name] : [summary]{RESET}\n", nil,
+			"    cheats from regex: {MAGENTA}{BOLD}\"{regex}\"{RESET}\n",
+			map[string]string{"regex": args[0]},
 		)
 
 		// Body
