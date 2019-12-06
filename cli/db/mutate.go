@@ -52,14 +52,27 @@ func RenameCheat(name string, newName string) _Cheat {
      WHERE name = ?;
     `,
 	)
-	defer utils.Check(statement.Close, "Could not close statement preparation to rename <Cheat: "+name+"> to \""+newName+"\"")
+	defer utils.Check(
+		statement.Close,
+		"Could not close statement preparation to rename <Cheat: "+name+"> to \""+newName+"\"",
+	)
 	if err != nil {
-		panic(exceptions.CheatException("Could not prepare database statement to rename <Cheat: "+name+"> to \""+newName+"\"", err))
+		panic(
+			exceptions.CheatException(
+				"Could not prepare database statement to rename <Cheat: "+name+"> to \""+newName+"\"",
+				err,
+			),
+		)
 	}
 
 	_, err = statement.Exec(newName, name)
 	if err != nil {
-		panic(exceptions.CheatException("Could not execute database statement to rename <Cheat: "+name+"> to \""+newName+"\"", err))
+		panic(
+			exceptions.CheatException(
+				"Could not execute database statement to rename <Cheat: "+name+"> to \""+newName+"\"",
+				err,
+			),
+		)
 	}
 
 	return GetCheatByName(newName, false)

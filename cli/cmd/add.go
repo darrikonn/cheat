@@ -1,12 +1,13 @@
 package cmd
 
 import (
-	"cheat/cli/db"
-	"cheat/cli/exceptions"
-	"cheat/cli/utils"
 	"strings"
 
 	"github.com/spf13/cobra"
+
+	"cheat/cli/db"
+	"cheat/cli/exceptions"
+	"cheat/cli/utils"
 )
 
 var (
