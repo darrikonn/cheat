@@ -6,11 +6,13 @@ workflows:
   version: 2.1
   cheat:
     jobs:
-      - go-latest
-      - go-one-thirteen
-      - go-one-twelve
-      - go-one-eleven
+      - lint_and_build:
+          filters:
+            tags:
+              only: /.*/
       - release:
+          requires:
+            - lint_and_build
           # Only run this job on git tag pushes
           filters:
             branches:
@@ -40,10 +42,12 @@ references:
       name: 'build'
       command: go build
 
-commands:
+jobs:
   lint_and_build:
-    description: |
-      Installs all dependencies (dev as well)
+    executor:
+      name: go
+      version: '1.13'
+    working_directory: *workspace
     steps:
       - checkout
       - run:
@@ -55,39 +59,10 @@ commands:
       - *lint
       - *build
 
-jobs:
-  go-latest:
-    executor:
-      name: go
-      version: '1.13'
-    working_directory: *workspace
-    steps:
-      - lint_and_build
-  go-one-thirteen:
-    executor:
-      name: go
-      version: '1.13'
-    working_directory: *workspace
-    steps:
-      - lint_and_build
-  go-one-twelve:
-    executor:
-      name: go
-      version: '1.13'
-    working_directory: *workspace
-    steps:
-      - lint_and_build
-  go-one-eleven:
-    executor:
-      name: go
-      version: '1.13'
-    working_directory: *workspace
-    steps:
-      - lint_and_build
-
   release:
-    docker:
-      - image: circleci/golang:1.13
+    executor:
+      name: go
+      version: '1.13'
     steps:
       - checkout
       - run: curl -sL https://git.io/goreleaser | bash

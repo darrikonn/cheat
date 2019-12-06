@@ -42,6 +42,5 @@ format:
 	go fmt ./...
 
 ### DEPLOYMENT ###
-github-release:
+release:
 	./bin/push_tag.sh
-
