@@ -6,13 +6,13 @@ workflows:
   version: 2.1
   cheat:
     jobs:
-      - lint_and_build:
+      - lint_build_test:
           filters:
             tags:
               only: /.*/
       - release:
           requires:
-            - lint_and_build
+            - lint_build_test
           # Only run this job on git tag pushes
           filters:
             branches:
@@ -30,24 +30,15 @@ executors:
         default: 'latest'
     docker:
       - image: circleci/golang:<<parameters.version>>
-    environment: 
-      LATEST: true
-      GO111MODULE: on
 
 references:
   workspace: &workspace
     /go/src/github.com/darrikonn/cobra
   lint: &lint
-    run:
-      name: 'Lint'
-      command: make lint
   build: &build
-    run:
-      name: 'build'
-      command: go build
 
 jobs:
-  lint_and_build:
+  lint_build_test:
     executor:
       name: go
       version: '1.13'
@@ -60,8 +51,15 @@ jobs:
       - run:
           name: 'Install dev requirements'
           command: make dev-requirements
-      - *lint
-      - *build
+      - run:
+          name: 'Lint'
+          command: make lint
+      - run:
+          name: 'Build'
+          command: go build
+      - run:
+          name: 'Test'
+          command: cheat
 
   release:
     executor:
