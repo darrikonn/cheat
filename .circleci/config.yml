@@ -21,6 +21,15 @@ workflows:
               only: /v[0-9]+(\.[0-9]+)*(-.*)*/
 
 executors:
+  xcgo:
+    description: GoReleaser xcgo build image
+    parameters:
+      version:
+        description: Go version to use
+        type: string
+        default: 'latest'
+    docker:
+      - image: darrikonn/goreleaser-xcgo:<<parameters.version>>
   go:
     description: Go build image
     parameters:
@@ -63,11 +72,9 @@ jobs:
 
   release:
     executor:
-      name: go
-      version: '1.13'
+      name: xcgo
     steps:
       - checkout
       - run:
           name: 'Create releases with GoReleaser'
-          command: |
-            docker run -e GITHUB_TOKEN=$GITHUB_TOKEN --rm --privileged -v $CIRCLE_WORKING_DIRECTORY:/go/src/github.com/darrikonn/cheat -v /var/run/docker.sock:/var/run/docker.sock -w /go/src/github.com/darrikonn/cheat darrikonn/goreleaser-xcgo goreleaser --rm-dist
+          command: goreleaser --rm-dist

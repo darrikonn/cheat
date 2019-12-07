@@ -77,8 +77,7 @@ changelog:
 brew:
   github:
     owner: darrikonn
-    name: homebrew-tap
-  folder: Formula
+    name: homebrew-formulae
   homepage: https://github.com/darrikonn/cheat
   description: Secure, email-like messaging for blockchain addresses and accounts
   test: |
