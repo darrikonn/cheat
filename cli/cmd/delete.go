@@ -35,7 +35,11 @@ Delete a cheat from your cheatsheet.
 
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		cheat := db.GetCheatByName(args[0], deleteFlags.ignoreCase)
+		cheat, err := db.GetCheatByName(args[0], deleteFlags.ignoreCase)
+		if err != nil {
+			panic(err)
+		}
+
 		if !deleteFlags.yes {
 			utils.Render(
 				"    {BOLD}{name}{RESET}: {description}\n",

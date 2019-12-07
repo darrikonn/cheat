@@ -36,7 +36,10 @@ prompted for the cheat's "description" in your preferred editor.
 
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		cheat := db.GetCheatByName(args[0], editFlags.ignoreCase)
+		cheat, err := db.GetCheatByName(args[0], editFlags.ignoreCase)
+		if err != nil {
+			panic(err)
+		}
 
 		// Let's first try to rename the cheat
 		if cmd.Flags().Changed("name") {

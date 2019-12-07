@@ -31,7 +31,10 @@ Get a cheat info by name
 
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		cheat := db.GetCheatByName(args[0], getFlags.ignoreCase)
+		cheat, err := db.GetCheatByName(args[0], getFlags.ignoreCase)
+		if err != nil {
+			panic(err)
+		}
 
 		// Header
 		utils.Render(

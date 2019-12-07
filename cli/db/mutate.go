@@ -75,7 +75,11 @@ func RenameCheat(name string, newName string) _Cheat {
 		)
 	}
 
-	return GetCheatByName(newName, false)
+	cheat, err := GetCheatByName(newName, false)
+	if err != nil {
+		panic(err)
+	}
+	return cheat
 }
 
 // EditCheat : edits cheat's attributes in the database

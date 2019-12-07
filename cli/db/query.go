@@ -8,7 +8,7 @@ import (
 )
 
 // GetCheatByName : returns a cheat by name from the database
-func GetCheatByName(name string, ignoreCase bool) _Cheat {
+func GetCheatByName(name string, ignoreCase bool) (_Cheat, error) {
 	var cheat _Cheat
 	row := database.QueryRow(`
     SELECT name, created, description, weight FROM cheat
@@ -21,11 +21,11 @@ func GetCheatByName(name string, ignoreCase bool) _Cheat {
 
 	switch err {
 	case sql.ErrNoRows:
-		panic(exceptions.CheatException("<Cheat: "+name+"> could not be found!", err))
+		return cheat, exceptions.CheatException("<Cheat: "+name+"> could not be found!", err)
 	case nil:
-		return cheat
+		return cheat, nil
 	default:
-		panic(exceptions.CheatException("Unknown exception occurred", err))
+		return cheat, exceptions.CheatException("Unknown exception occurred", err)
 	}
 }
 

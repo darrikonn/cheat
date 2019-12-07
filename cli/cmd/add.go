@@ -1,12 +1,14 @@
 package cmd
 
 import (
+	"database/sql"
 	"strings"
 
 	"github.com/spf13/cobra"
 
 	"cheat/cli/db"
 	"cheat/cli/exceptions"
+	"cheat/cli/models"
 	"cheat/cli/utils"
 )
 
@@ -34,8 +36,12 @@ the cheat's "description" in your preferred editor.
 
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		cheat := db.GetCheatByName(args[0], false)
-		if cheat.Name == args[0] {
+		cheat, err := db.GetCheatByName(args[0], false)
+		if err != nil && err.(*exceptions.CheatExceptionType).Original() != sql.ErrNoRows {
+			panic(err)
+		}
+
+		if cheat != (models.Cheat{}) && cheat.Name == args[0] {
 			panic(exceptions.CheatException("<Cheat: "+args[0]+"> already exists!", nil))
 		}
 
