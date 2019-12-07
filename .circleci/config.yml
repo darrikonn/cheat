@@ -30,9 +30,13 @@ executors:
         default: 'latest'
     docker:
       - image: circleci/golang:<<parameters.version>>
+    environment: 
+      LATEST: true
+      GO111MODULE: on
 
 references:
-  workspace: &workspace /go/src/github.com/spf13/cobra
+  workspace: &workspace
+    /go/src/github.com/darrikonn/cobra
   lint: &lint
     run:
       name: 'Lint'
@@ -65,4 +69,7 @@ jobs:
       version: '1.13'
     steps:
       - checkout
-      - run: curl -sL https://git.io/goreleaser | bash
+      - run:
+          name: 'Create releases with GoReleaser'
+          command: |
+            docker run -e GITHUB_TOKEN=$GITHUB_TOKEN --rm --privileged -v $CIRCLE_WORKING_DIRECTORY:/go/src/github.com/darrikonn/cheat -v /var/run/docker.sock:/var/run/docker.sock -w /go/src/github.com/darrikonn/cheat darrikonn/goreleaser-xcgo goreleaser --rm-dist
