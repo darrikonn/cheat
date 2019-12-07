@@ -79,6 +79,13 @@ brew:
     owner: darrikonn
     name: homebrew-formulae
   homepage: https://github.com/darrikonn/cheat
-  description: Secure, email-like messaging for blockchain addresses and accounts
+  description: A fast and flexible cheatsheet manager built with Go
   test: |
     system "#{bin}/cheat -v"
+scoop:
+  bucket:
+    owner: darrikonn
+    name: scoop-bucket
+  homepage: https://github.com/darrikonn/cheat
+  description: A fast and flexible cheatsheet manager built with Go
+  license: MIT 
