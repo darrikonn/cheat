@@ -21,7 +21,7 @@ requirements:
 dev-requirements:
 	@while read in; do \
 		echo "$$in"; \
-		eval "$$in"; \
+		GO111MODULE=off go get -u "$$in"; \
 	done < dev-requirements.txt
 
 golint:
