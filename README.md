@@ -2,32 +2,45 @@
     <img src="https://user-images.githubusercontent.com/5694851/70360689-1fafa100-1877-11ea-8c2a-92386220ae63.png" alt="Icon"/>
   <br />
   <br />
-  <a href="https://pypi.org/project/cheat/">
-    <img src="https://img.shields.io/pypi/v/cheat.svg?style=flat-square"/>
+  <a href="https://github.com/darrikonn/cheat/releases/latest">
+    <img src="https://img.shields.io/github/release/darrikonn/cheat.svg?style=flat-square"/>
   </a>
-  <a href="https://pypi.org/project/cheat/">
-    <img src="https://img.shields.io/pypi/dm/cheat?style=flat-square"/>
+  <a href="https://github.com/goreleaser">
+    <img src="https://img.shields.io/badge/powered%20by-goreleaser-green.svg?style=flat-square"/>
   </a>
   <a href="https://github.com/darrikonn/cheat/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/Licence-MIT-yellow.svg?longCache=true&style=flat-square"/>
   </a>
-  <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/Made With-Go-red.svg?longCache=true&style=flat-square"/>
+  <a href="https://golang.org/">
+    <img src="https://img.shields.io/badge/Made With-Go-9cf.svg?longCache=true&style=flat-square"/>
   </a>
 </h3>
 
 <pre>
   <p align="center"><a href="https://pypi.org/project/cheat/"><strong>cheat</strong></a> is a command line cheat manager, <br/>where you can create and manage your personal cheatsheet</p>
-  <p align="center"><img class="img-responsive" width="500" src="https://raw.githubusercontent.com/darrikonn/cheat/master/img/cheat.gif" alt="gif"/></p>
+  <p align="center"><img class="img-responsive" width="500" src="https://user-images.githubusercontent.com/5694851/70467469-2f202b80-1abd-11ea-9f29-0d52abfd09e9.gif" alt="gif"/></p>
   <p align="center"><a href="https://circleci.com/gh/darrikonn/cheat"><img src="https://circleci.com/gh/darrikonn/cheat.svg?style=svg" /></a></p>
 </pre>
 
 
 ## Installation
-[**cheat**](https://pypi.org/project/cheat/) works on all OSs, so it needs to be installed with the package manager that suits your OS.
-```bash
-brew install cheat
-```
+Pre-built packages for Windows, macOS, and Linux are found on the [releases](https://github.com/darrikonn/cheat/releases) page.
+
+Managed packages are in:
+* **Homebrew** (*MacOs*)
+  ```bash
+  brew tap darrikonn/formulae
+  brew install darrikonn/formulae/cheat
+  ```
+* **Scoop** (*Windows*)
+  ```powerline
+  scoop bucket add app https://github.com/darrikonn/cheat.git
+  scoop install cheat
+  ```
+* **Other** (*Linux distros*)
+  ```bash
+  curl -s https://github.com/darrikonn/cheat/blob/master/install.sh | bash -s /usr/local/bin
+  ```
 
 ## Getting started
 Run `cheat --help` to see possible commands.
@@ -53,7 +66,7 @@ database: ~/.custom-database-name.db
 This results in a database instance at `~/.custom-database-name.db`
 
 ### Editor
-When adding/editing a cheat, you'll be prompted to edit the cheat's `description` in your preferred editor. You can set you preferred editor in the `~/.cheat.yaml` config file:
+When adding/editing a cheat, you'll be prompted to edit the cheat's `description` in your preferred editor. You can set your desired editor in the `~/.cheat.yaml` config file:
 ```yaml
 editor: nvim
 ```
