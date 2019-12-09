@@ -39,7 +39,7 @@ Managed packages are in:
   ```
 * **Other** (*Linux distros*)
   ```bash
-  curl -s https://github.com/darrikonn/cheat/blob/master/install.sh | bash -s /usr/local/bin
+  curl -s https://github.com/darrikonn/cheat/blob/master/install.sh | bash -s -- -b /usr/local/bin
   ```
 
 ## Getting started
