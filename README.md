@@ -48,7 +48,7 @@ Run `cheat --help` to see possible commands.
 Here are some to get you started:
 - Run `cheat` to list all your cheats.
 
-- Run `cheat some.*regex` to cheats matching your regex.
+- Run `cheat some.*regex` to fetch cheats matching your regex.
 
 - Run `cheat some.*regex add` to add a new cheat.
 
