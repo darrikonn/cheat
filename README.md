@@ -17,7 +17,7 @@
 </h3>
 
 <pre>
-  <p align="center"><a href="https://pypi.org/project/cheat/"><strong>cheat</strong></a> is a command line cheat manager, <br/>where you can create and manage your personal cheatsheet</p>
+  <p align="center"><a href="https://github.com/darrikonn/cheat"><strong>cheat</strong></a> is a command line cheat manager, <br/>where you can create and manage your personal cheatsheet</p>
   <p align="center"><img class="img-responsive" width="500" src="https://user-images.githubusercontent.com/5694851/70467469-2f202b80-1abd-11ea-9f29-0d52abfd09e9.gif" alt="gif"/></p>
   <p align="center"><a href="https://circleci.com/gh/darrikonn/cheat"><img src="https://circleci.com/gh/darrikonn/cheat.svg?style=svg" /></a></p>
 </pre>
@@ -39,7 +39,7 @@ Managed packages are in:
   ```
 * **Other** (*Linux distros*)
   ```bash
-  curl -s https://github.com/darrikonn/cheat/blob/master/install.sh | bash -s -- -b /usr/local/bin
+  curl -s https://raw.githubusercontent.com/darrikonn/cheat/master/install.sh | bash -s -- -b /usr/local/bin
   ```
 
 ## Getting started
