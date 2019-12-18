@@ -58,7 +58,7 @@ Check out the [`api`](https://github.com/darrikonn/cheat/blob/master/API.md).
 
 ## Configuring
 ### Database
-By default the database will be located at `~/.cheetsheet.db`.
+By default the database will be located at `~/.cheatsheet.db`.
 You can change your database path, and name, by specifying `database` in your `~/.cheat.yaml` file:
 ```yaml
 database: ~/.custom-database-name.db
