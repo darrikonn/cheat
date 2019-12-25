@@ -111,15 +111,21 @@ func errorHandling() {
 }
 
 func initConfig() {
-	// Find home directory.
-	homeDirectory, err := os.UserHomeDir()
-	if err != nil {
-		panic(exceptions.CheatException("Could not find home directory", err))
-	}
+	// Find config/home directory.
+	configrc, err := os.UserConfigDir()
+    if err != nil {
+        configrc, err = os.UserHomeDir()
+        if err != nil {
+	    	panic(exceptions.CheatException("Could not find home directory", err))
+	    }
+        configrc += "/.cheat/"
+    } else {
+        configrc += "/cheat/"
+    }
 
-	// Search config in home directory with name ".cheat" (without extension).
-	viper.AddConfigPath(homeDirectory)
-	viper.SetConfigName(".cheat")
+	// Search cheat folder in home or config directory and file name "cheatrc"
+    viper.AddConfigPath(configrc)
+	viper.SetConfigName("cheatrc")
 
 	// Fallback to "vi" for the editor
 	viper.SetDefault("editor", utils.GetEnv("EDITOR", "vi"))
