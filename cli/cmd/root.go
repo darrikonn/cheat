@@ -20,7 +20,7 @@ var (
 
 	rootCmd = &cobra.Command{
 		Use:          "cheat",
-		Version:      "1.1.0",
+		Version:      "1.1.1",
 		SilenceUsage: true,
 		Short:        "Cheat is a personal cheatsheet manager",
 		Long: strings.TrimSpace(`
