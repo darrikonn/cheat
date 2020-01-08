@@ -27,7 +27,7 @@ func ResolvePath(path string) string {
 
 // CreateFile : creates a file in path
 func CreateFile(file string) {
-	_, err := os.Create(file)
+	_, err := os.Create(ResolvePath(file))
 	if err != nil {
 		panic(exceptions.CheatException("Could not create file: \""+file+"\"", err))
 	}
@@ -51,9 +51,10 @@ func FileExists(name string) bool {
 	return true
 }
 
-// HomeDir : finds the cheat's home directory in order to
-// unclutter your $HOME directory
-func HomeDir() string {
+// CheatHomeDir : finds the cheat's home directory in order to
+// unclutter your $HOME directory. It also returns a prefix for
+// cheat files
+func CheatHomeDir() (string, string) {
 	var dir string
 
 	// Check if CHEAT_HOME environment is set
@@ -67,7 +68,7 @@ func HomeDir() string {
 				),
 			)
 		}
-		return dir
+		return ResolvePath(dir), ""
 	}
 
 	// Check if XDG_CONFIG_HOME environment is set
@@ -87,7 +88,7 @@ func HomeDir() string {
 		if !FileExists(dir) {
 			CreateDir(dir)
 		}
-		return dir
+		return ResolvePath(dir), ""
 	}
 
 	// Else default to home directory
@@ -95,5 +96,5 @@ func HomeDir() string {
 	if err != nil {
 		panic(exceptions.CheatException("Could not find home directory", err))
 	}
-	return dir
+	return dir, "."
 }

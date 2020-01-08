@@ -112,15 +112,15 @@ func errorHandling() {
 
 func initConfig() {
 	// Find home directory.
-	homeDirectory := utils.HomeDir()
+	homeDirectory, prefix := utils.CheatHomeDir()
 
-	// Search config in home directory with name ".cheat" (without extension).
+	// Search config in home directory with name "cheat" (without extension).
 	viper.AddConfigPath(homeDirectory)
-	viper.SetConfigName(".cheat")
+	viper.SetConfigName(prefix + "cheat")
 
 	// Fallback to "vi" for the editor
 	viper.SetDefault("editor", utils.GetEnvWithFallback("EDITOR", "vi"))
-	viper.SetDefault("database", homeDirectory+"/.cheatsheet.db")
+	viper.SetDefault("database", homeDirectory+"/"+prefix+"cheatsheet.db")
 
 	// Load config
 	_ = viper.ReadInConfig()
