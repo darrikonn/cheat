@@ -20,7 +20,7 @@ var (
 
 	rootCmd = &cobra.Command{
 		Use:          "cheat",
-		Version:      "1.0.0",
+		Version:      "1.1.0",
 		SilenceUsage: true,
 		Short:        "Cheat is a personal cheatsheet manager",
 		Long: strings.TrimSpace(`
@@ -112,18 +112,15 @@ func errorHandling() {
 
 func initConfig() {
 	// Find home directory.
-	homeDirectory, err := os.UserHomeDir()
-	if err != nil {
-		panic(exceptions.CheatException("Could not find home directory", err))
-	}
+	homeDirectory := utils.HomeDir()
 
 	// Search config in home directory with name ".cheat" (without extension).
 	viper.AddConfigPath(homeDirectory)
 	viper.SetConfigName(".cheat")
 
 	// Fallback to "vi" for the editor
-	viper.SetDefault("editor", utils.GetEnv("EDITOR", "vi"))
-	viper.SetDefault("database", "~/.cheatsheet.db")
+	viper.SetDefault("editor", utils.GetEnvWithFallback("EDITOR", "vi"))
+	viper.SetDefault("database", homeDirectory+"/.cheatsheet.db")
 
 	// Load config
 	_ = viper.ReadInConfig()
