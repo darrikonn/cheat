@@ -10,8 +10,8 @@ import (
 	"cheat/cli/exceptions"
 )
 
-// GetEnv : gets environment variable with a fallback
-func GetEnv(key string, fallback string) string {
+// GetEnvWithFallback : gets environment variable with a fallback
+func GetEnvWithFallback(key string, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
 	}

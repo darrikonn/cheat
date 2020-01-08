@@ -119,7 +119,7 @@ func initConfig() {
 	viper.SetConfigName(".cheat")
 
 	// Fallback to "vi" for the editor
-	viper.SetDefault("editor", utils.GetEnv("EDITOR", "vi"))
+	viper.SetDefault("editor", utils.GetEnvWithFallback("EDITOR", "vi"))
 	viper.SetDefault("database", homeDirectory+"/.cheatsheet.db")
 
 	// Load config
