@@ -57,16 +57,21 @@ Here are some to get you started:
 Check out the [`api`](https://github.com/darrikonn/cheat/blob/master/API.md).
 
 ## Configuring
+The location of your cheat data and your configuration will depend on these environment variables (in this order):
+1. **CHEAT_HOME**: determines where your `.cheatsheet.db` and `.cheat.yaml` file will live
+2. **XDG_CONFIG_HOME**: a fallback if `$CHEAT_HOME` is not set
+3. **HOME**: a fallback if `$XDG_CONFIG_HOME` is not set
+
 ### Database
-By default the database will be located at `~/.cheatsheet.db`.
-You can change your database path, and name, by specifying `database` in your `~/.cheat.yaml` file:
+By default the database will be located at `$CHEAT_HOME/.cheatsheet.db`.
+You can change your database path, and name, by specifying `database` in your `$CHEAT_HOME/.cheat.yaml` file:
 ```yaml
 database: ~/.custom-database-name.db
 ```
 This results in a database instance at `~/.custom-database-name.db`
 
 ### Editor
-When adding/editing a cheat, you'll be prompted to edit the cheat's `description` in your preferred editor. You can set your desired editor in the `~/.cheat.yaml` config file:
+When adding/editing a cheat, you'll be prompted to edit the cheat's `description` in your preferred editor. You can set your desired editor in the `$CHEAT_HOME/.cheat.yaml` config file:
 ```yaml
 editor: nvim
 ```
